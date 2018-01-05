@@ -65,6 +65,7 @@ class RadarInterface(object):
         self.pts[ii].vRel = cpt['REL_SPEED']
         self.pts[ii].aRel = float('nan')
         self.pts[ii].yvRel = float('nan')
+        self.pts[ii].measured = True
       else:
         if ii in self.pts:
           del self.pts[ii]

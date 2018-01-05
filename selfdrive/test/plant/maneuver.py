@@ -45,7 +45,7 @@ class Maneuver(object):
       grade = np.interp(plant.current_time(), self.grade_breakpoints, self.grade_values)
       speed_lead = np.interp(plant.current_time(), self.speed_lead_breakpoints, self.speed_lead_values)
 
-      distance, speed, acceleration, distance_lead, brake, gas, steer_torque, live100 = plant.step(speed_lead, current_button, grade)
+      distance, speed, acceleration, distance_lead, brake, gas, steer_torque, fcw, live100= plant.step(speed_lead, current_button, grade)
       if live100:
         last_live100 = live100[-1]
 
@@ -60,11 +60,13 @@ class Maneuver(object):
           gas=gas, brake=brake, steer_torque=steer_torque,
           distance=distance, speed=speed, acceleration=acceleration,
           up_accel_cmd=last_live100.upAccelCmd, ui_accel_cmd=last_live100.uiAccelCmd,
+          uf_accel_cmd=last_live100.ufAccelCmd,
           d_rel=d_rel, v_rel=v_rel, v_lead=speed_lead,
           v_target_lead=last_live100.vTargetLead, pid_speed=last_live100.vPid,
           cruise_speed=last_live100.vCruise,
           jerk_factor=last_live100.jerkFactor,
-          a_target_min=last_live100.aTargetMin, a_target_max=last_live100.aTargetMax)
+          a_target=last_live100.aTarget,
+          fcw=fcw)
     
     print "maneuver end"
 

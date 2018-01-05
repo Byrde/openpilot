@@ -3,7 +3,7 @@ Welcome to openpilot
 
 [openpilot](http://github.com/commaai/openpilot) is an open source driving agent.
 
-Currently it performs the functions of Adaptive Cruise Control (ACC) and Lane Keeping Assist System (LKAS) for Hondas and Acuras. It's about on par with Tesla Autopilot at launch, and better than [all other manufacturers](http://www.thedrive.com/tech/5707/the-war-for-autonomous-driving-part-iii-us-vs-germany-vs-japan).
+Currently it performs the functions of Adaptive Cruise Control (ACC) and Lane Keeping Assist System (LKAS) for Hondas, Acuras and Toyotas. It's about on par with Tesla Autopilot at launch, and better than [all other manufacturers](http://www.thedrive.com/tech/5707/the-war-for-autonomous-driving-part-iii-us-vs-germany-vs-japan).
 
 The openpilot codebase has been written to be concise and enable rapid prototyping. We look forward to your contributions - improving real vehicle automation has never been easier.
 
@@ -29,22 +29,37 @@ Supported Cars
 - Honda CR-V Touring 2015-2016
   - Can only be enabled above 25 mph
 
-- Toyota RAV-4 2016+ with TSS-P (alpha!)
-  - Can only be enabled above 20 mph
+- Toyota RAV-4 2016+ non-hybrid with TSS-P
+  - By default it uses stock Toyota ACC for longitudinal control
+  - openpilot longitudinal control available after unplugging the [Driving Support ECU](https://community.comma.ai/wiki/index.php/Toyota#Rav4_.28for_openpilot.29) and can be enabled above 20 mph
+
+- Toyota Prius 2017 (alpha!)
+  - By default it uses stock Toyota ACC for longitudinal control
+  - openpilot longitudinal control available after unplugging the [Driving Support ECU](https://community.comma.ai/wiki/index.php/Toyota#Prius_.28for_openpilot.29)
+  - Lateral control needs improvements
+
+- Toyota RAV-4 2017 hybrid (alpha!)
+  - By default it uses stock Toyota ACC for longitudinal control
+  - openpilot longitudinal control available after unplugging the [Driving Support ECU](https://community.comma.ai/wiki/index.php/Toyota#Rav4_.28for_openpilot.29) and can do stop and go
 
 In Progress Cars
 ------
+- Probably all TSS-P Toyota with Steering Assist.
+  - 'Full Speed Range Dynamic Radar Cruise Control' is required to enable stop-and-go. Only the Prius, Camry and C-HR have this option.
+  - Even though the Tundra, Sequoia and the Land Cruiser have TSS-P, they don't have Steering Assist and are not supported.
 
-- Toyota Prius 2017
-
-- Probably all TSS-P Toyota
-
-Community Ported Cars
+Community WIP Cars
 ------
 
-- Chevy Volt 2016-2018 Premier with Driver Confidence II
+- [Chevy Volt 2016-2018 Premier with Driver Confidence II](https://github.com/commaai/openpilot/pull/104)
 
-- Classic Tesla Model S (pre-AP)
+- [Classic Tesla Model S (pre-AP)](https://github.com/commaai/openpilot/pull/145)
+
+- [Honda Odyssey 2018 with Honda Sensing](https://github.com/commaai/openpilot/pull/155)
+
+- [Honda Pilot 2017 with Honda Sensing](https://github.com/commaai/openpilot/pull/161)
+
+- [Acura RDX 2018 with AcuraWatch Plus](https://github.com/commaai/openpilot/pull/162)
 
 Directory structure
 ------
@@ -98,7 +113,7 @@ User Data / chffr Account / Crash Reporting
 
 By default openpilot creates an account and includes a client for chffr, our dashcam app. We use your data to train better models and improve openpilot for everyone.
 
-It's open source software, so you are free to disable it if you wish. 
+It's open source software, so you are free to disable it if you wish.
 
 It logs the road facing camera, CAN, GPS, IMU, magnetometer, thermal sensors, crashes, and operating system logs.
 It does not log the user facing camera or the microphone.

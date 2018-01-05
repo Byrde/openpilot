@@ -28,6 +28,7 @@ struct InitData {
   version @4 :Text;
   gitCommit @10 :Text;
   gitBranch @11 :Text;
+  gitRemote @13 :Text;
 
   androidBuildInfo @5 :AndroidBuildInfo;
   androidSensors @6 :List(AndroidSensor);
@@ -154,6 +155,8 @@ struct SensorEventData {
     pressure @9 :SensorVec;
     magneticUncalibrated @11 :SensorVec;
     gyroUncalibrated @12 :SensorVec;
+    proximity @13: Float32;
+    light @14: Float32;
   }
   source @8 :SensorSource;
 
@@ -242,8 +245,11 @@ struct ThermalData {
   freeSpace @7 :Float32;
   batteryPercent @8 :Int16;
   batteryStatus @9 :Text;
+  usbOnline @12 :Bool;
 
   fanSpeed @10 :UInt16;
+  started @11 :Bool;
+  startedTs @13 :UInt64;
 }
 
 struct HealthData {
@@ -287,7 +293,7 @@ struct Live20Data {
     vRel @2 :Float32;
     aRel @3 :Float32;
     vLead @4 :Float32;
-    aLead @5 :Float32;
+    aLeadDEPRECATED @5 :Float32;
     dPath @6 :Float32;
     vLat @7 :Float32;
     vLeadK @8 :Float32;
@@ -337,19 +343,24 @@ struct Live100Data {
   vTargetLead @3 :Float32;
   upAccelCmd @4 :Float32;
   uiAccelCmd @5 :Float32;
+  ufAccelCmd @33 :Float32;
   yActualDEPRECATED @6 :Float32;
-  yDes @7 :Float32;
+  yDesDEPRECATED @7 :Float32;
   upSteer @8 :Float32;
   uiSteer @9 :Float32;
-  aTargetMin @10 :Float32;
-  aTargetMax @11 :Float32;
+  ufSteer @34 :Float32;
+  aTargetMinDEPRECATED @10 :Float32;
+  aTargetMaxDEPRECATED @11 :Float32;
+  aTarget @35 :Float32;
   jerkFactor @12 :Float32;
   angleSteers @13 :Float32;     # Steering angle in degrees.
   angleSteersDes @29 :Float32;
+  curvature @37 :Float32;       # path curvature from vehicle model
   hudLeadDEPRECATED @14 :Int32;
   cumLagMs @15 :Float32;
 
   enabled @19 :Bool;
+  active @36 :Bool;
   steerOverride @20 :Bool;
 
   vCruise @22 :Float32;
@@ -357,6 +368,8 @@ struct Live100Data {
   rearViewCam @23 :Bool;
   alertText1 @24 :Text;
   alertText2 @25 :Text;
+  alertStatus @38 :AlertStatus;
+  alertSize @39 :AlertSize;
   awarenessStatus @26 :Float32;
 
   angleOffset @27 :Float32;
@@ -374,6 +387,20 @@ struct Live100Data {
     stopping @2;
     starting @3;
   }
+
+  enum AlertStatus {
+    normal @0;       # low priority alert for user's convenience
+    userPrompt @1;   # mid piority alert that might require user intervention
+    critical @2;     # high priority alert that needs immediate user intervention
+  }
+
+  enum AlertSize {
+    none @0;    # don't display the alert
+    small @1;   # small box
+    mid @2;     # mid screen
+    full @3;    # full screen
+  }
+
 }
 
 struct LiveEventData {
@@ -388,7 +415,7 @@ struct ModelData {
   leftLane @2 :PathData;
   rightLane @3 :PathData;
   lead @4 :LeadData;
-  leadNew @6 :List(Float32);
+  freePath @6 :List(Float32);
 
   settings @5 :ModelSettings;
 
@@ -472,10 +499,13 @@ struct Plan {
 
   # longitudinal
   longitudinalValid @2 :Bool;
+  vCruise @16 :Float32;
+  aCruise @17 :Float32;
   vTarget @3 :Float32;
   vTargetFuture @14 :Float32;
-  aTargetMin @4 :Float32;
-  aTargetMax @5 :Float32;
+  aTargetMinDEPRECATED @4 :Float32;
+  aTargetMaxDEPRECATED @5 :Float32;
+  aTarget @18 :Float32;
   jerkFactor @6 :Float32;
   hasLead @7 :Bool;
   fcw @8 :Bool;
@@ -590,6 +620,23 @@ struct NavUpdate {
       uturn @19;
       # ...
     }
+  }
+}
+
+struct NavStatus {
+  isNavigating @0 :Bool;
+  currentAddress @1 :Address;
+
+  struct Address {
+    title @0 :Text;
+    lat @1 :Float64;
+    lng @2 :Float64;
+    house @3 :Text;
+    address @4 :Text;
+    street @5 :Text;
+    city @6 :Text;
+    state @7 :Text;
+    country @8 :Text;
   }
 }
 
@@ -1293,5 +1340,6 @@ struct Event {
     clocks @35 :Clocks;
     liveMpc @36 :LiveMpcData;
     liveLongitudinalMpc @37 :LiveLongitudinalMpcData;
+    navStatus @38 :NavStatus;
   }
 }
